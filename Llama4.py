@@ -50,7 +50,7 @@ def chat_with_model(user_input: str):
     """
     try:
         # 사용자 입력을 처리
-        inputs = processor(text=user_input, return_tensors="pt").to("cuda")
+        inputs = processor(text=user_input, return_tensors="pt")
 
         # 모델을 통해 응답 생성
         outputs = model.generate(**inputs)
