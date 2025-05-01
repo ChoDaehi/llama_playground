@@ -50,13 +50,13 @@ def chat_with_model(user_input: str):
     """
     try:
         # 사용자 입력을 처리
-        inputs = processor(text=user_input, return_tensors="pt",device_map=device_map)
+        inputs = processor(text=user_input, return_tensors="pt")
 
         # 모델을 통해 응답 생성
         outputs = model.generate(**inputs,device_map=device_map)
 
         # 응답 디코딩
-        decoded_output = processor.decode(outputs[0], skip_special_tokens=True,device_map=device_map)
+        decoded_output = processor.decode(outputs[0], skip_special_tokens=True)
 
         return decoded_output
     except Exception as e:
