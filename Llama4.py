@@ -1,5 +1,6 @@
-from transformers import AutoProcessor, AutoModelForImageTextToText,BitsAndBytesConfig
+from transformers import AutoProcessor, AutoModelForImageTextToText,BitsAndBytesConfig,AutoConfig
 import torch
+from accelerate import init_empty_weights, infer_auto_device_map
 
 # 모델 불러오기
 # 4ビット量子化の設定
@@ -9,8 +10,30 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
-processor = AutoProcessor.from_pretrained("meta-llama/Llama-4-Scout-17B-16E",device_map="balanced_low_0")
-model = AutoModelForImageTextToText.from_pretrained("meta-llama/Llama-4-Scout-17B-16E", quantization_config=bnb_config,device_map='balanced_low_0')
+
+
+
+model_name = "meta-llama/Llama-3-8B-Instruct"
+config = AutoConfig.from_pretrained(model_name)
+
+with init_empty_weights():
+    model = AutoModelForImageTextToText.from_config(config)
+
+# GPU 0에 최대 20GiB, GPU 1에도 분산
+device_map = infer_auto_device_map(
+    model,
+    max_memory={
+        "cuda:0": "22GiB",
+        "cuda:1": "22GiB",
+        "cuda:2": "22GiB",
+        "cuda:3": "22GiB" # 다른 GPU가 있다면 추가
+    },
+    no_split_module_classes=["LlamaDecoderLayer"]  # 나누기 싫은 레이어 지정
+)
+
+# 실제 모델 로드
+processor = AutoProcessor.from_pretrained("meta-llama/Llama-4-Scout-17B-16E",device_map=device_map)
+model = AutoModelForImageTextToText.from_pretrained("meta-llama/Llama-4-Scout-17B-16E", quantization_config=bnb_config,device_map=device_map)
 
 
 # 채팅 함수
