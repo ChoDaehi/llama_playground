@@ -53,7 +53,7 @@ def chat_with_model(user_input: str):
         inputs = processor(text=user_input, return_tensors="pt")
 
         # 모델을 통해 응답 생성
-        outputs = model.generate(**inputs,device_map=device_map)
+        outputs = model.generate(**inputs)
 
         # 응답 디코딩
         decoded_output = processor.decode(outputs[0], skip_special_tokens=True)
