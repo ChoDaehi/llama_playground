@@ -21,10 +21,10 @@ with init_empty_weights():
 device_map = infer_auto_device_map(
     model,
     max_memory={
-        "cuda:0": "22GiB",
-        "cuda:1": "22GiB",
-        "cuda:2": "22GiB",
-        "cuda:3": "22GiB" # 다른 GPU가 있다면 추가
+        0: "22GiB",
+        1: "22GiB",
+        2: "22GiB",
+        3: "22GiB" # 다른 GPU가 있다면 추가
     },
     no_split_module_classes=["LlamaDecoderLayer"]  # 나누기 싫은 레이어 지정
 )
