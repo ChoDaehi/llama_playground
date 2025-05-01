@@ -11,9 +11,7 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_compute_dtype=torch.float16
 )
 
-
-
-model_name = "meta-llama/Llama-3-8B-Instruct"
+model_name = "meta-llama/Llama-4-Scout-17B-16E"
 config = AutoConfig.from_pretrained(model_name)
 
 with init_empty_weights():
@@ -32,8 +30,8 @@ device_map = infer_auto_device_map(
 )
 
 # 실제 모델 로드
-processor = AutoProcessor.from_pretrained("meta-llama/Llama-4-Scout-17B-16E",device_map=device_map)
-model = AutoModelForImageTextToText.from_pretrained("meta-llama/Llama-4-Scout-17B-16E", quantization_config=bnb_config,device_map=device_map)
+processor = AutoProcessor.from_pretrained(model_name,device_map=device_map)
+model = AutoModelForImageTextToText.from_pretrained(model_name, quantization_config=bnb_config,device_map=device_map)
 
 
 # 채팅 함수
