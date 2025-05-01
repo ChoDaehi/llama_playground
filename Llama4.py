@@ -9,8 +9,8 @@ bnb_config = BitsAndBytesConfig(
     bnb_4bit_quant_type="nf4",
     bnb_4bit_compute_dtype=torch.float16
 )
-processor = AutoProcessor.from_pretrained("meta-llama/Llama-4-Scout-17B-16E",device_map="balanced")
-model = AutoModelForImageTextToText.from_pretrained("meta-llama/Llama-4-Scout-17B-16E", quantization_config=bnb_config,device_map='balanced')
+processor = AutoProcessor.from_pretrained("meta-llama/Llama-4-Scout-17B-16E",device_map="balanced_low_0")
+model = AutoModelForImageTextToText.from_pretrained("meta-llama/Llama-4-Scout-17B-16E", quantization_config=bnb_config,device_map='balanced_low_0')
 
 
 # 채팅 함수
