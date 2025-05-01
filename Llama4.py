@@ -51,6 +51,8 @@ def chat_with_model(user_input: str):
     try:
         # 사용자 입력을 처리
         inputs = processor(text=user_input, return_tensors="pt")
+        # 입력 데이터를 모델의 첫 번째 GPU로 이동 (device_map 기본 설정을 따름)
+        inputs = {k: v.to(model.device) for k, v in inputs.items()}
 
         # 모델을 통해 응답 생성
         outputs = model.generate(**inputs)
