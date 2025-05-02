@@ -51,6 +51,8 @@ def chat_with_model(user_input: str):
     try:
         # 사용자 입력을 처리
         inputs = processor(text=user_input, return_tensors="pt")
+        # 데이터 타입을 long으로 변환
+        inputs = {k: v.long() for k, v in inputs.items()}
         # 입력 데이터를 모델의 첫 번째 GPU로 이동 (device_map 기본 설정을 따름)
         inputs = {k: v.to(next(model.parameters())) for k, v in inputs.items()}
 
