@@ -52,7 +52,7 @@ def chat_with_model(user_input: str):
         # 사용자 입력을 처리
         inputs = processor(text=user_input, return_tensors="pt")
         # 입력 데이터를 모델의 첫 번째 GPU로 이동 (device_map 기본 설정을 따름)
-        inputs = {k: v.to(model.device) for k, v in inputs.items()}
+        inputs = {k: v.to(next(model.parameters())) for k, v in inputs.items()}
 
         # 모델을 통해 응답 생성
         outputs = model.generate(**inputs)
@@ -62,7 +62,11 @@ def chat_with_model(user_input: str):
 
         return decoded_output
     except Exception as e:
-        return f"오류가 발생했습니다: {e}"
+        # 디버깅을 위한 전체 스택 출력
+        import traceback
+        print("오류 발생:")
+        print(traceback.format_exc())
+        return f"오류 발생: {e}"
 
 
 # 채팅 예시
